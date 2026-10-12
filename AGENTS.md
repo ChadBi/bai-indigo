@@ -6,7 +6,7 @@
 
 - 中文名：染见白乡——白族扎染工艺数字体验与创新传播平台。
 - 建议英文品牌名 Bai Indigo，代码标识 bai-indigo。
-- demo/index.html 是保留的单文件交互原型；app/ 已迁移完整编辑、制作、PNG 下载与两次对比，接通 Worker 和 IndexedDB 草稿；持久化作品库尚未实现。
+- demo/index.html 是保留的单文件交互原型；app/ 已实现编辑、制作、PNG、两次会话对比、Worker、IndexedDB 草稿，以及“我的作品”的自动保存、重命名、删除和继续编辑。
 - 新工程建立在 app/，参考 Demo 保留，避免将已有功能丢失。
 - 以 Vue 3、TypeScript、Vite、Vue Router、Pinia、Canvas、Web Worker 和 IndexedDB 为架构基线。
 - 核心任务：工艺学习、数字扎染、模板创作、作品保存与文化传播。

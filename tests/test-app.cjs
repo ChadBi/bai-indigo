@@ -216,7 +216,7 @@ const target = process.env.APP_URL || "http://127.0.0.1:5173";
       ["染艺寻踪", "染艺寻踪"],
       ["一布一染", "一布一染"],
       ["纹样工坊", "纹样工坊"],
-      ["染作生成", "染作生成"],
+      ["染作生成", "我的作品"],
       ["白乡故事", "白乡故事"],
     ]) {
       await page
@@ -311,7 +311,11 @@ const target = process.env.APP_URL || "http://127.0.0.1:5173";
         .getByRole("link", { name, exact: true })
         .click();
       await page
-        .getByRole("heading", { name, exact: true, level: 1 })
+        .getByRole("heading", {
+          name: name === "染作生成" ? "我的作品" : name,
+          exact: true,
+          level: 1,
+        })
         .waitFor();
       assert(
         await page.evaluate(

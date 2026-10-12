@@ -1,7 +1,7 @@
 import type {
   DyeParams,
   RenderResponse,
-  SessionDyeResult,
+  EncodedDyeResult,
 } from "../shared/types";
 import { cloneParams } from "../shared/validation";
 
@@ -54,7 +54,7 @@ export async function encodeDye(
   canvas: HTMLCanvasElement,
   params: DyeParams,
   signal: AbortSignal,
-): Promise<SessionDyeResult> {
+): Promise<EncodedDyeResult> {
   const assertActive = () => {
     if (signal.aborted) throw new DOMException("已取消", "AbortError");
   };
@@ -75,7 +75,9 @@ export async function encodeDye(
     createdAt: new Date().toISOString(),
   };
 }
-export function downloadResult(result: SessionDyeResult): void {
+export function downloadResult(
+  result: Pick<EncodedDyeResult, "image" | "params">,
+): void {
   const url = URL.createObjectURL(result.image),
     anchor = document.createElement("a");
   anchor.href = url;

@@ -25,7 +25,7 @@ pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-启动与检查详见 [app/README.md](app/README.md)。成品对比保留最近两次会话结果，刷新后清空；草稿可恢复。作品库、命名与重新打开尚未实现，作品页会明确说明。队友从 [docs/team-tasks.md](docs/team-tasks.md) 和各模块 README 开始。
+启动与检查详见 [app/README.md](app/README.md)。成品自动保存到本浏览器的“我的作品”，可重命名、删除、查看和继续编辑；继续制作另存新作品。两次会话对比刷新清空，已保存作品及草稿仍可恢复。保存失败的成品留在内存待保存列表，可重试或下载，刷新会丢失。队友从 [docs/team-tasks.md](docs/team-tasks.md) 和各模块 README 开始。
 
 直接用浏览器打开 `demo/index.html`，无需构建或服务端。需要 HTTP 预览时，可在项目根目录使用可用的静态文件服务，例如：
 

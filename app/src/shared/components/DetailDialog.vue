@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from "vue";
 import BaseButton from "./BaseButton.vue";
-defineProps<{ title: string }>();
+const props = defineProps<{ title: string; returnFocus?: HTMLElement }>();
 const emit = defineEmits<{ close: [] }>();
 const dialog = ref<HTMLDialogElement>();
 let previous: HTMLElement | null = null;
 onMounted(() => {
-  previous = document.activeElement as HTMLElement;
+  previous = props.returnFocus ?? (document.activeElement as HTMLElement);
   dialog.value?.showModal();
 });
 onBeforeUnmount(() => {

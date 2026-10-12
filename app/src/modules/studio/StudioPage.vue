@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, ref, shallowRef, watch } from "vue";
 import { useStudioStore } from "../../stores/studio";
+import { useWorksStore } from "../../stores/works";
 import { contentRepository } from "../../services/content";
 import { WorkerRenderer } from "../../services/renderer";
 import { DyeProcess } from "../../services/process";
@@ -18,6 +19,7 @@ import ComparisonDialog from "./ComparisonDialog.vue";
 const studio = useStudioStore(),
   patterns = contentRepository.patterns(),
   comparison = ref(false);
+const works = useWorksStore();
 const image = shallowRef<CanvasImageSource | null>(null);
 let disposed = false,
   decodeId = 0,
@@ -35,7 +37,10 @@ const process = new DyeProcess({
     return encoded;
   },
   onState: (phase, progress) => studio.updateProcess(phase, progress),
-  onComplete: (result) => studio.finishProcess(result),
+  onComplete: (result) => {
+    const completed = studio.finishProcess(result);
+    if (completed) void works.saveResult(completed);
+  },
   onError: (message) => {
     image.value = null;
     preparedBlob = undefined;
@@ -326,7 +331,31 @@ const radius = computed(() =>
             :disabled="studio.phase !== 'done' || !studio.currentResult"
             @click="download"
             >下载 PNG</BaseButton
-          ><small>完成两次制作后可对比。<br />会话结果刷新后清空。</small>
+          ><small
+            >完成两次制作后可对比。<br />会话对比刷新后清空，已保存作品仍可找回。</small
+          >
+          <p
+            v-if="studio.currentResult && studio.phase === 'done'"
+            class="work-save-status"
+            role="status"
+          >
+            {{
+              works.statuses[studio.currentResult.id] === "saving"
+                ? "作品正在保存…"
+                : works.statuses[studio.currentResult.id] === "saved"
+                  ? "作品已保存到我的作品"
+                  : works.statuses[studio.currentResult.id] === "error"
+                    ? "作品保存失败，当前结果留在内存中。"
+                    : "当前结果未保留在我的作品。"
+            }}
+            <BaseButton
+              v-if="works.statuses[studio.currentResult.id] === 'error'"
+              variant="secondary"
+              @click="works.retry(studio.currentResult.id)"
+              >重试保存作品</BaseButton
+            >
+          </p>
+          <RouterLink to="/works">查看我的作品 ↗</RouterLink>
         </div>
       </aside>
     </div>

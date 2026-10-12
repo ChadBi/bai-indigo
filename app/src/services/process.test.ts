@@ -1,7 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { DyeProcess } from "./process";
 import type { AnimationClock } from "./process";
-import type { Renderer, SessionDyeResult, StudioPhase } from "../shared/types";
+import type { Renderer, EncodedDyeResult, StudioPhase } from "../shared/types";
 import { initialParams } from "../content/patterns";
 class Clock implements AnimationClock {
   time = 0;
@@ -37,7 +37,7 @@ function fixture() {
     dispose: vi.fn(),
   };
   const encode = vi.fn(
-    async (_pixels, params): Promise<SessionDyeResult> => ({
+    async (_pixels, params): Promise<EncodedDyeResult> => ({
       params,
       image: new Blob(["image"]),
       thumbnail: new Blob(["thumb"]),

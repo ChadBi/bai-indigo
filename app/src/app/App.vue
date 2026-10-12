@@ -2,11 +2,16 @@
 import { onMounted, onBeforeUnmount } from "vue";
 import { navigation } from "./router";
 import { useStudioStore } from "../stores/studio";
+import { useWorksStore } from "../stores/works";
 const studio = useStudioStore();
+const works = useWorksStore();
 onMounted(() => {
   void studio.initialize();
 });
-onBeforeUnmount(() => studio.dispose());
+onBeforeUnmount(() => {
+  studio.dispose();
+  works.dispose();
+});
 </script>
 <template>
   <a class="skip-link" href="#main">跳到正文</a>

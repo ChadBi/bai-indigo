@@ -1,6 +1,6 @@
 # 正式系统架构与实施顺序
 
-本文件是开发基线。app/ 已完成工程骨架、完整 Demo 交互、纯像素引擎、Worker、IndexedDB 草稿、PNG 下载、会话对比和队友模块样例；持久化作品库与完整内容仍在后续实施范围。
+app/ 已完成工程骨架、完整 Demo 交互、Worker、草稿、本地“我的作品”、PNG、会话对比和队友模块样例；方案文件及完整内容仍是后续任务。
 
 ## 技术选择
 
@@ -56,12 +56,12 @@ app/src/
 
 ## 数据契约
 
-共享 TypeScript 类型位于 app/src/shared/types.ts，校验位于 shared/validation.ts。Renderer、DraftRepository 已有实现；WorksRepository 仅定义接口，尚无作品适配器。
+共享类型位于 app/src/shared/types.ts，校验位于 shared/validation.ts；Renderer、DraftRepository 和 WorksRepository 均已有实现。
 
 - DyeParams：schemaVersion、engineVersion、seed、style、fold、depth、knots；每个 knot 有稳定 id、归一化 x/y 和 radius。
-- DyeWork：id、name、createdAt、updatedAt、params、thumbnail Blob、image Blob。
+- DyeWork：id、name、createdAt、updatedAt、params、editor（templateId、defaultRadius）、thumbnail Blob、image Blob。
 - Draft：params、updatedAt、templateId、defaultRadius；恢复参数后重新计算预览，不恢复半截动画。
-- SessionDyeResult：冻结的 params、image Blob、thumbnail Blob、createdAt；Pinia 仅保留最近两次完成结果，不写入数据库。
+- EncodedDyeResult 为计算编码结果；完成时生成带稳定 id、冻结 editor 的 SessionDyeResult，Pinia 保留两次会话对比并自动交给作品适配器保存。
 - CultureEntry / StoryEntry：id、title、summary、body、images、sourceRefs、relatedPatternIds；标明 traditional 或 original 类型。
 
 坐标不依赖屏幕像素。seed 与 engineVersion 一起保存，使历史方案有明确的重现条件。生成与保存的数据需要校验范围和版本。
@@ -90,13 +90,17 @@ services/process.ts 使用独立成品 Renderer、AbortSignal 和任务代次，
 
 ## 服务边界
 
-ContentRepository 读取资料；WorksRepository 提供草稿和作品的读写；Renderer 负责计算。后续云端保存可替换存储服务实现，不要求重写每个页面。
+ContentRepository 读取资料，DraftRepository 管理唯一草稿，WorksRepository 管理成品，Renderer 负责计算。storage.ts 复用数据库连接和事务辅助实现，仍使用 bai-indigo v1；没有新增索引或迁移草稿。
+
+作品保存事务返回实际提交的记录，同 ID 重试不新增或覆盖旧记录；重命名在单一事务中读取并仅修改名称与更新时间，删除事务成功后才更新列表。列表返回 items、invalidCount，异常数据保留。works store 的修改代次防止旧列表响应覆盖新保存结果。
+
+作品失败队列在 Pinia 中跨页面保留，重试、下载或明确移除；刷新后清空。查看作品不触发生成及自动保存；继续编辑重新校验并复制参数，在草稿不同时确认替换，遇到失效草稿不绕过保护。加载不会进入会话对比，完成后自动保存新的独立 ID。
 
 ## 顺序与完成标准
 
 1. 骨架：已建立 app/、锁文件、路由、公共组件、类型、队友入口，并接通 Worker 和草稿。
 2. 迁移：已接通布面编辑、制作过程、1024 PNG 和两次会话对比；Demo 保留。
-3. 闭环：草稿恢复、作品库、命名与删除、方案导出/导入、继续编辑。
+3. 闭环：草稿、作品自动保存、命名、删除和继续编辑已完成；方案导出／导入随后实现。
 4. 内容：工艺教学、纹样解释与文化卡片接入当前步骤。
 5. 队友：合并各展示模块，检查数据、样式和响应式。
 6. 发布：检查完整流程、导出、恢复、正式域名访问与缓存。

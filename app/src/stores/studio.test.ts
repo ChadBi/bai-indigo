@@ -3,6 +3,7 @@ import { setActivePinia, createPinia } from "pinia";
 import { createStudioStore } from "./studio";
 import { initialParams } from "../content/patterns";
 import type { Draft, DraftRepository } from "../shared/types";
+import type { DyeWork } from "../shared/types";
 const sample = (): Draft => ({
   params: initialParams(),
   templateId: "four",
@@ -208,6 +209,58 @@ describe("studio recovery and saves", () => {
     expect(store.history).toHaveLength(1);
     store.undo();
     expect(store.params.fold).toBe("none");
+    store.dispose();
+  });
+  it("loads a separate editable copy with exact editor metadata and does not add a session result", async () => {
+    const repositoryInstance = repository(),
+      store = createStudioStore(repositoryInstance)();
+    await store.initialize();
+    store.setDepth("light");
+    const work: DyeWork = {
+      id: "saved",
+      name: "蓝布",
+      params: initialParams(),
+      editor: { templateId: "custom", defaultRadius: 0.21 },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      image: new Blob(["png"], { type: "image/png" }),
+      thumbnail: new Blob(["thumb"], { type: "image/png" }),
+    };
+    expect(store.differsFromWork(work)).toBe(true);
+    await store.loadWorkForEditing(work);
+    expect(store.history).toHaveLength(0);
+    expect(store.results).toHaveLength(0);
+    expect(store.defaultRadius).toBe(0.21);
+    expect(store.templateId).toBe("custom");
+    expect(store.differsFromWork(work)).toBe(false);
+    store.setRadius(0.18);
+    expect(work.params.knots[0].radius).toBe(0.13);
+    expect(repositoryInstance.writeDraft).toHaveBeenCalled();
+    store.dispose();
+  });
+  it("blocks loading works over a broken draft and retains loaded params when saving fails", async () => {
+    const work: DyeWork = {
+      id: "saved",
+      name: "蓝布",
+      params: initialParams(),
+      editor: { templateId: "four", defaultRadius: 0.13 },
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      image: new Blob(["png"], { type: "image/png" }),
+      thumbnail: new Blob(["thumb"], { type: "image/png" }),
+    };
+    const repositoryInstance = repository({ bad: true }),
+      store = createStudioStore(repositoryInstance)();
+    await store.initialize();
+    await expect(store.loadWorkForEditing(work)).rejects.toThrow("草稿");
+    expect(repositoryInstance.writeDraft).not.toHaveBeenCalled();
+    await store.resetDraft();
+    vi.mocked(repositoryInstance.writeDraft).mockRejectedValueOnce(
+      new Error("quota"),
+    );
+    await store.loadWorkForEditing(work);
+    expect(store.saveState).toBe("error");
+    expect(store.params).toEqual(work.params);
     store.dispose();
   });
 });

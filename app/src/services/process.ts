@@ -2,7 +2,7 @@ import type {
   DyeParams,
   Renderer,
   RenderResponse,
-  SessionDyeResult,
+  EncodedDyeResult,
   StudioPhase,
 } from "../shared/types";
 import { cloneParams } from "../shared/validation";
@@ -18,9 +18,9 @@ interface ProcessOptions {
     result: Extract<RenderResponse, { ok: true }>,
     params: DyeParams,
     signal: AbortSignal,
-  ): Promise<SessionDyeResult>;
+  ): Promise<EncodedDyeResult>;
   onState(phase: StudioPhase, progress: number): void;
-  onComplete(result: SessionDyeResult): void;
+  onComplete(result: EncodedDyeResult): void;
   onError(message: string): void;
   clock?: AnimationClock;
 }
@@ -28,7 +28,7 @@ export class DyeProcess {
   private generation = 0;
   private controller?: AbortController;
   private frame?: number;
-  private candidate?: SessionDyeResult;
+  private candidate?: EncodedDyeResult;
   private phase: StudioPhase = "edit";
   private reduced = false;
   private clock: AnimationClock;

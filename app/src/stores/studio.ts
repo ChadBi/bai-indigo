@@ -5,14 +5,17 @@ import type {
   Draft,
   DraftRepository,
   DyeParams,
+  DyeWork,
+  EncodedDyeResult,
   EditSnapshot,
   Fold,
   PatternId,
   SessionDyeResult,
   StudioPhase,
   TemplateSelection,
+  WorkEditorState,
 } from "../shared/types";
-import { assertDraft, cloneParams } from "../shared/validation";
+import { assertDraft, assertWork, cloneParams } from "../shared/validation";
 import { patterns, initialParams } from "../content/patterns";
 import { IndexedDbDraftRepository } from "../services/storage";
 
@@ -51,6 +54,7 @@ export function createStudioStore(repository: DraftRepository) {
       previousResult = computed(() => results.value.at(-2));
     let timer: ReturnType<typeof setTimeout> | undefined,
       beforeEdit: EditSnapshot | undefined;
+    let processEditor: WorkEditorState | undefined;
     let committedRevision = 0,
       savedRevision = 0,
       pendingSaves = 0,
@@ -363,6 +367,10 @@ export function createStudioStore(repository: DraftRepository) {
       processError.value = "";
       notice.value = "";
       phase.value = "preparing";
+      processEditor = {
+        templateId: templateId.value,
+        defaultRadius: defaultRadius.value,
+      };
       progress.value = 0;
       void saveNow();
       return cloneParams(params.value);
@@ -371,16 +379,25 @@ export function createStudioStore(repository: DraftRepository) {
       phase.value = next;
       progress.value = value;
     }
-    function finishProcess(result: SessionDyeResult) {
-      if (phase.value !== "unfold") return;
-      results.value = [
-        ...results.value,
-        { ...result, params: cloneParams(result.params) },
-      ].slice(-2);
+    function finishProcess(
+      result: EncodedDyeResult,
+    ): SessionDyeResult | undefined {
+      if (phase.value !== "unfold" || !processEditor) return;
+      const completed: SessionDyeResult = {
+        ...result,
+        id: crypto.randomUUID(),
+        editor: { ...processEditor },
+        params: cloneParams(result.params),
+        createdAt: new Date().toISOString(),
+      };
+      processEditor = undefined;
+      results.value = [...results.value, completed].slice(-2);
       phase.value = "done";
       progress.value = 1;
+      return completed;
     }
     function failProcess(message: string) {
+      processEditor = undefined;
       phase.value = "edit";
       progress.value = 0;
       processError.value = message;
@@ -393,6 +410,7 @@ export function createStudioStore(repository: DraftRepository) {
       processError.value = "";
     }
     function leaveStudio() {
+      processEditor = undefined;
       cancelEdit();
       if (phase.value !== "done") {
         phase.value = "edit";
@@ -400,6 +418,35 @@ export function createStudioStore(repository: DraftRepository) {
       }
       selectedId.value = null;
       void saveNow();
+    }
+    function differsFromWork(work: DyeWork): boolean {
+      return !equal(capture(), { params: work.params, ...work.editor });
+    }
+    async function loadWorkForEditing(work: DyeWork): Promise<void> {
+      if (
+        disposed ||
+        !initialized.value ||
+        resetting.value ||
+        !["edit", "done"].includes(phase.value)
+      )
+        throw new Error("当前无法载入作品，请稍后重试。");
+      if (recovery.value !== "none")
+        throw new Error(
+          "请先在掌上扎染处理当前草稿的读取或版本问题，再继续编辑。",
+        );
+      assertWork(work);
+      cancelEdit();
+      cancelTimer();
+      restore({ params: work.params, ...work.editor });
+      phase.value = "edit";
+      progress.value = 0;
+      processEditor = undefined;
+      selectedId.value = null;
+      history.value = [];
+      processError.value = "";
+      notice.value = "";
+      committedRevision++;
+      await saveNow();
     }
     function dispose() {
       disposed = true;
@@ -449,6 +496,8 @@ export function createStudioStore(repository: DraftRepository) {
       failProcess,
       reedit,
       leaveStudio,
+      differsFromWork,
+      loadWorkForEditing,
       dispose,
     };
   });

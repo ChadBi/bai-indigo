@@ -38,20 +38,20 @@ export type EditSnapshot = Pick<
   Draft,
   "params" | "templateId" | "defaultRadius"
 >;
-export interface SessionDyeResult {
+export interface EncodedDyeResult {
   readonly params: DyeParams;
   readonly image: Blob;
   readonly thumbnail: Blob;
   readonly createdAt: string;
 }
-export interface DyeWork {
-  id: string;
+export type WorkEditorState = Pick<Draft, "templateId" | "defaultRadius">;
+export interface SessionDyeResult extends EncodedDyeResult {
+  readonly id: string;
+  readonly editor: WorkEditorState;
+}
+export interface DyeWork extends SessionDyeResult {
   name: string;
-  createdAt: string;
   updatedAt: string;
-  params: DyeParams;
-  thumbnail: Blob;
-  image: Blob;
 }
 export type ContentKind = "traditional" | "original";
 export interface SourceRef {
@@ -135,12 +135,17 @@ export interface DraftRepository {
   deleteDraft(): Promise<void>;
   close(): void;
 }
-// Contract only: no works adapter or works UI is implemented in this milestone.
+export interface WorksListResult {
+  items: readonly DyeWork[];
+  invalidCount: number;
+}
 export interface WorksRepository {
-  listWorks(): Promise<readonly DyeWork[]>;
+  listWorks(): Promise<WorksListResult>;
   getWork(id: string): Promise<DyeWork | undefined>;
-  saveWork(work: DyeWork): Promise<void>;
+  saveWork(work: DyeWork): Promise<DyeWork>;
   deleteWork(id: string): Promise<void>;
+  renameWork(id: string, name: string): Promise<DyeWork>;
+  close(): void;
 }
 export interface ContentRepository {
   cultures(): readonly CultureEntry[];

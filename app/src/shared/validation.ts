@@ -1,5 +1,5 @@
 import { ENGINE_VERSION, SCHEMA_VERSION } from "./types";
-import type { Draft, DyeParams } from "./types";
+import type { Draft, DyeParams, DyeWork } from "./types";
 
 function record(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -22,9 +22,12 @@ export function assertParams(value: unknown): asserts value is DyeParams {
   if (
     !Number.isInteger(value.seed) ||
     !bounded(value.seed, 0, 0x7fffffff) ||
-    !["circle", "stripe"].includes(String(value.style)) ||
-    !["none", "half", "quarter"].includes(String(value.fold)) ||
-    !["light", "medium", "deep"].includes(String(value.depth)) ||
+    typeof value.style !== "string" ||
+    !["circle", "stripe"].includes(value.style) ||
+    typeof value.fold !== "string" ||
+    !["none", "half", "quarter"].includes(value.fold) ||
+    typeof value.depth !== "string" ||
+    !["light", "medium", "deep"].includes(value.depth) ||
     !Array.isArray(value.knots) ||
     value.knots.length > 12
   )
@@ -48,8 +51,9 @@ export function assertDraft(value: unknown): asserts value is Draft {
   if (!record(value)) throw new Error("草稿格式无效。");
   assertParams(value.params);
   if (
+    typeof value.templateId !== "string" ||
     !["four", "flower", "stripe", "free", "custom"].includes(
-      String(value.templateId),
+      value.templateId,
     ) ||
     !bounded(value.defaultRadius, 0.06, 0.24) ||
     typeof value.updatedAt !== "string" ||
@@ -59,4 +63,40 @@ export function assertDraft(value: unknown): asserts value is Draft {
 }
 export function cloneParams(params: DyeParams): DyeParams {
   return { ...params, knots: params.knots.map((knot) => ({ ...knot })) };
+}
+export function normalizeWorkName(value: string): string {
+  const name = value.trim();
+  if ([...name].length < 1 || [...name].length > 40)
+    throw new Error("作品名称须为 1—40 个字符。");
+  return name;
+}
+export function assertWork(value: unknown): asserts value is DyeWork {
+  if (
+    !record(value) ||
+    typeof value.id !== "string" ||
+    !value.id ||
+    typeof value.name !== "string"
+  )
+    throw new Error("作品记录格式无效。");
+  if (normalizeWorkName(value.name) !== value.name)
+    throw new Error("作品名称格式无效。");
+  assertParams(value.params);
+  if (!record(value.editor)) throw new Error("作品缺少编辑信息。");
+  assertDraft({
+    params: value.params,
+    templateId: value.editor.templateId,
+    defaultRadius: value.editor.defaultRadius,
+    updatedAt: value.updatedAt,
+  });
+  if (
+    typeof value.createdAt !== "string" ||
+    !Number.isFinite(Date.parse(value.createdAt)) ||
+    !(value.image instanceof Blob) ||
+    value.image.type !== "image/png" ||
+    !value.image.size ||
+    !(value.thumbnail instanceof Blob) ||
+    value.thumbnail.type !== "image/png" ||
+    !value.thumbnail.size
+  )
+    throw new Error("作品时间或图片数据无效。");
 }
