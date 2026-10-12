@@ -18,6 +18,15 @@
 
 ## 当前可以运行什么
 
+正式工程位于 `app/`，已接通六个页面入口、Worker 染色预览和 IndexedDB 草稿保存／恢复。在 `app/` 使用 Node.js 24.11+、pnpm 11.25.0：
+
+```sh
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+启动与检查详见 [app/README.md](app/README.md)。作品库、完整布面编辑、制作动画、对比和导出尚未迁移，作品页会明确说明。队友从 [docs/team-tasks.md](docs/team-tasks.md) 和各模块 README 开始。
+
 直接用浏览器打开 `demo/index.html`，无需构建或服务端。需要 HTTP 预览时，可在项目根目录使用可用的静态文件服务，例如：
 
 ```sh
@@ -26,15 +35,17 @@ python -m http.server 5173 --directory demo
 
 访问 `http://127.0.0.1:5173`。Python 不是 Demo 的业务依赖，仅用于这个可选的预览方式。Codex 环境提供 bundled runtimes 时，先使用依赖定位工具取得运行路径。
 
-**正式 Vue 工程尚未建立。** `demo/` 是可复用的交互原型；`docs/` 是后续工程的规划，不代表已完成功能。
+`demo/` 保留完整交互原型；正式工程完成状态以 [HANDOFF.md](HANDOFF.md) 和实际检查记录为准，后续功能规划不代表已实现。
 
 ## 在新对话中继续
 
 将整个 `bai-indigo` 文件夹作为工作目录，使用 [CODEX_PROMPT.md](CODEX_PROMPT.md) 中的接手提示。只发送项目书会缺少 Demo 源码、部署目标和开发边界。
 
-包内没有 Git 历史、登录令牌、云端密钥、node_modules、旧预览访问参数或原机器的绝对路径配置。IGA 的非敏感项目 ID 保存在 `deployment/iga-project-reference.json`，没有自动激活的 `.iga/project.json`。
+原移交包没有 Git 历史。本地现已建立 `main` 分支，保留移交基线及后续工程提交；没有创建远端或推送。登录令牌、云端密钥、node_modules、构建及测试产物均不提交。IGA 的非敏感项目 ID 保存在 `deployment/iga-project-reference.json`，没有自动激活的 `.iga/project.json`。
 
 ## 文件目录
+
+以下为原移交材料目录；新增正式工程在 `app/`，浏览器检查在 `tests/test-app.cjs`。`FILE_MANIFEST.json` 仅记录 2026-10-12 原移交包的文件哈希，不是当前仓库清单。
 
 ```text
 bai-indigo/

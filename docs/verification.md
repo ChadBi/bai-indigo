@@ -33,3 +33,33 @@ npm run test:demo
 可选环境变量：DEMO_URL 指定 HTTP 页面；PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH 指定已有 Chromium 可执行文件。二者都不是必要配置，不要把个人绝对路径提交进项目。
 
 输出保存在 tests/test-results/；这些运行产物不包含在移交压缩包内，也已被 .gitignore 排除。自动检查报告应与实际执行结果对应；后续正式系统需要新增作品持久化、恢复和计算取消等检查。
+
+## 正式工程骨架检查（2026-10-12）
+
+本次实际执行：
+
+- app/ 的 `pnpm install --frozen-lockfile --offline` 成功；`pnpm typecheck` 与 `pnpm build` 通过。
+- `pnpm test`：5 个测试文件、16 项通过。覆盖同种子重现、种子变化、折叠映射与去重、260／1024 尺寸留白结构、非法参数、草稿重开／串行保存／失败重试、旧 Worker 取消／响应 ID／终止、恢复前不覆盖、500ms 保存、无效草稿保护、旧保存状态保护，以及内容来源和模板引用。
+- `tests/test-app.cjs` 分别在开发服务 5173 和生产构建预览 4173 运行，通过真实 Worker 预览、连续改参、线程启动失败与重试、IndexedDB 保存及刷新后同图重现、存储失败重试、无效草稿保护与重置、初次读取失败重试、六个路由、详情来源及焦点恢复、键盘折叠、故事／模板跳转、手机布局与运行错误检查。
+- 测试通过浏览器环境内替换 Worker 构造函数、IDBFactory.open 和 IDBObjectStore.put 注入失败；产品源码没有测试开关或故障后门。
+- 桌面窗口 1366×768、手机 390×844；检查六个页面无手机横向溢出，截图已查看。桌面和手机均允许正文纵向滚动。
+- 原 `tests/test-demo.cjs` 重跑通过：原有加点、拖动、大小、折叠、深浅、制作锁定、拆线、导出、对比、空布面反馈、撤销、模板、手机布局和运行错误。
+- Demo 与 reference/ 文件未修改。环境、依赖、构建、测试产物、移交 ZIP 及 .iga 配置排除在 Git 提交之外；没有设置远端或发布。
+
+检查使用 bundled Node.js 24.19.0 和本机可用 Chromium 浏览器。运行时及浏览器路径仅通过执行环境指定，没有写入仓库。TypeScript 固定为 5.9.3；实际发现最新 7.0.2 与当前 vue-tsc 3.3.13 不兼容，换用固定兼容版本后检查通过。
+
+新增截图为 `tests/test-results/app-desktop.png` 与 `app-mobile.png`，不提交到仓库。自动检查使用新建浏览器上下文，不使用个人浏览记录。
+
+### 重跑正式工程
+
+先在 app/ 启动开发服务或构建预览，再在 tests/ 执行：
+
+```sh
+npm install
+npx playwright install chromium
+npm run test:app
+```
+
+`APP_URL` 可指定其他端口／生产预览，默认 http://127.0.0.1:5173。其他浏览器使用既有 `PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH` 环境变量。检查会创建自己的测试草稿并注入损坏数据，应在本地测试服务执行。
+
+本次没有验证正式工程的布面编辑／触控拖动、制作动画、PNG 下载、成品作品库、方案导入导出、多标签页冲突、真实手机及其他浏览器兼容性，因为这些功能尚未迁移或不属于本次验收。此前 Demo 的相关结果不能代替正式系统检查。

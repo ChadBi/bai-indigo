@@ -1,6 +1,12 @@
 # 新生队友任务边界
 
-主开发者先完成工程与共享组件，再发模块任务。每个队友有完整但可独立检查的工作，不把核心开发进度绑定在新生模块上。
+工程、共享组件、类型和样例现已建立。队友可使用下方对应模块 README 开始，完整筛选和展示完善仍由队友完成，不把核心开发进度绑定在新生模块上。
+
+- A：[culture/README.md](../app/src/modules/culture/README.md)，组件 CultureModule 接收 entries、sources。
+- B：[stories/README.md](../app/src/modules/stories/README.md)，组件 StoriesModule 接收 entries、sources，发出 selectPattern(PatternId)。
+- C：[learning/glossary/README.md](../app/src/modules/learning/glossary/README.md)，组件 GlossaryModule 接收 terms、faqs、sources。
+
+公共类型位于 app/src/shared/types.ts；样例数据位于 app/src/content/entries.ts；公共组件位于 app/src/shared/components/。数据由主系统读取后传入，队友不用自行连接内容仓库。在 app/ 使用 pnpm install --frozen-lockfile 和 pnpm dev 启动。
 
 | 任务 | 范围 | 需要预先提供 | 完成标准 |
 |---|---|---|---|
@@ -23,4 +29,4 @@
 
 在本项目已建立的 app/ 中完成指定展示模块。先阅读 AGENTS.md、模块说明、共享类型和已有样例。只改分配的目录，复用公共组件和样式变量，按提供的数据展示内容。不要新增依赖，不改路由、全局样式、store、engine 或数据存储。需要跳转或选择纹样时使用约定事件。完成后运行工程检查，并说明实现内容、修改文件和检查结果。
 
-主开发者发任务时应补上具体目录、接口名称、样例文件和验收项。当前 app/ 尚未建立，不能把以上模板直接当成可执行的完整任务。
+各模块 README 已提供目录、接口、样例位置和验收项，可与上述通用提示一并交给队友。当前最小样例不等于队友任务已经完成。

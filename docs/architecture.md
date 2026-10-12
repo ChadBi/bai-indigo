@@ -1,6 +1,6 @@
 # 正式系统架构与实施顺序
 
-本文件是开发基线，正式工程尚未建立。
+本文件是开发基线。app/ 已完成工程骨架、纯像素引擎、真实 Worker 预览、IndexedDB 草稿和队友模块样例；完整交互及作品库仍在后续实施范围。
 
 ## 技术选择
 
@@ -34,7 +34,7 @@ flowchart TD
 
 界面收集操作，引擎生成图案，存储服务负责读写数据。算法不依赖 Vue 组件，页面不直接处理数据库细节。
 
-## app/src 规划
+## app/src 目录
 
 ```text
 app/src/
@@ -56,11 +56,11 @@ app/src/
 
 ## 数据契约
 
-建立共享 TypeScript 类型后，各模块使用同一数据结构。以下字段是设计要求，不是已经实现的接口。
+共享 TypeScript 类型位于 app/src/shared/types.ts，校验位于 shared/validation.ts。Renderer、DraftRepository 已有实现；WorksRepository 仅定义接口，尚无作品适配器。
 
 - DyeParams：schemaVersion、engineVersion、seed、style、fold、depth、knots；每个 knot 有稳定 id、归一化 x/y 和 radius。
 - DyeWork：id、name、createdAt、updatedAt、params、thumbnail Blob、image Blob。
-- Draft：params、updatedAt；恢复到可编辑状态，不恢复半截动画。
+- Draft：params、updatedAt、templateId、defaultRadius；恢复参数后重新计算预览，不恢复半截动画。
 - CultureEntry / StoryEntry：id、title、summary、body、images、sourceRefs、relatedPatternIds；标明 traditional 或 original 类型。
 
 坐标不依赖屏幕像素。seed 与 engineVersion 一起保存，使历史方案有明确的重现条件。生成与保存的数据需要校验范围和版本。
@@ -68,6 +68,12 @@ app/src/
 IndexedDB 使用项目专属名称 `bai-indigo`，以免通用 Demo 域名上的不同应用互相混用记录。只保存当前浏览器的个人数据，配套方案文件导出。存储失败、空间不足或隐私模式异常应有可恢复反馈，不宣称数据永久可靠。
 
 ## 引擎与状态
+
+当前预览分辨率 260×260。engine/dye.ts 从 Demo 提取，算法版本 demo-resist-v1，参数版本 1。WorkerRenderer 为每次请求创建 Worker，新请求终止旧 Worker；成功、失败、取消和超时均清理线程。主线程另用 requestId 防止旧结果绘制，退出创作页也取消请求。
+
+stores/studio.ts 先读取和校验草稿，再开启参数编辑与自动保存。services/storage.ts 建立 bai-indigo v1 的 drafts、works 仓库，串行提交草稿，失败后允许重试。未知／损坏草稿不会自动覆盖；明确重置才删除。500ms 自动保存尚未提交时关页可能丢失最后修改；多标签页冲突合并尚未实现。
+
+以下制作状态与导出是下一阶段的迁移目标：
 
 状态流程：编辑 → 浸染 → 氧化 → 等待拆线 → 展开 → 完成。动画表达过程，最终结果由参数决定。
 
@@ -83,8 +89,8 @@ ContentRepository 读取资料；WorksRepository 提供草稿和作品的读写�
 
 ## 顺序与完成标准
 
-1. 骨架：建立 app/、依赖锁文件、路由、公共组件、类型与队友入口。
-2. 迁移：保留 Demo 全部交互，将状态、引擎和界面解耦。
+1. 骨架：已建立 app/、锁文件、路由、公共组件、类型、队友入口，并接通 Worker 和草稿。
+2. 迁移：保留 Demo 全部交互，继续迁移布面编辑、制作过程与结果操作。
 3. 闭环：草稿恢复、作品库、命名与删除、方案导出/导入、继续编辑。
 4. 内容：工艺教学、纹样解释与文化卡片接入当前步骤。
 5. 队友：合并各展示模块，检查数据、样式和响应式。
