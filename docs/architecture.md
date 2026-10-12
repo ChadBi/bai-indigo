@@ -43,7 +43,7 @@ app/src/
   modules/
     culture/           队友 A 的资料展示
     stories/           队友 B 的图文故事
-    learning/glossary/ 队友 C 的术语与常见问题
+    learning/glossary/ 主开发者的术语与常见问题
     learning/          工艺教学主流程
     studio/            创作界面
     patterns/          模板与工坊

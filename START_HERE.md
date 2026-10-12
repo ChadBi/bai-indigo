@@ -14,6 +14,8 @@
 4. [docs/team-tasks.md](docs/team-tasks.md)：队友任务及合并要求。
 5. [demo/index.html](demo/index.html)：可直接运行的掌上扎染 Demo。
 
+两位队员按 [任务单](docs/member-tasks.md)、[AI coding 指南](docs/ai-coding-guide.md) 和 [Git 教程](docs/git-basics.md) 开始。协作仓库为 [ChadBi/bai-indigo](https://github.com/ChadBi/bai-indigo)，每人独立 clone、建任务分支，通过 PR 交付，由主开发者审查和合并。
+
 项目书位于 `reference/project-brief.docx` 和 `reference/project-brief.pdf`。二者均为最终修订的 10 页版本。竞赛原始指南位于 `reference/competition-guide-2026.pdf`。
 
 ## 当前可以运行什么
@@ -41,7 +43,7 @@ python -m http.server 5173 --directory demo
 
 将整个 `bai-indigo` 文件夹作为工作目录，使用 [CODEX_PROMPT.md](CODEX_PROMPT.md) 中的接手提示。只发送项目书会缺少 Demo 源码、部署目标和开发边界。
 
-原移交包没有 Git 历史。本地现已建立 `main` 分支，保留移交基线及后续工程提交；没有创建远端或推送。登录令牌、云端密钥、node_modules、构建及测试产物均不提交。IGA 的非敏感项目 ID 保存在 `deployment/iga-project-reference.json`，没有自动激活的 `.iga/project.json`。
+原移交包没有 Git 历史。现已建立 `main` 分支，保留移交基线及后续工程提交，并推送到公开仓库 ChadBi/bai-indigo；origin 指向该仓库。队员使用分支与 PR 协作，不直接推送 main。登录令牌、云端密钥、node_modules、构建及测试产物均不提交。IGA 的非敏感项目 ID 保存在 `deployment/iga-project-reference.json`，没有自动激活的 `.iga/project.json`。GitHub 上传没有触发 IGA 发布。
 
 ## 文件目录
 

@@ -4,13 +4,13 @@
 
 ---
 
-继续开发“染见白乡——白族扎染工艺数字体验与创新传播平台”，英文品牌名暂用 Bai Indigo，工程标识 bai-indigo。当前工作目录就是解压后的 bai-indigo 文件夹。
+继续开发“染见白乡——白族扎染工艺数字体验与创新传播平台”，英文品牌名暂用 Bai Indigo，工程标识 bai-indigo。当前工作目录是 bai-indigo 工程根目录。
 
 先阅读 AGENTS.md、START_HERE.md、HANDOFF.md、docs/architecture.md、docs/product-scope.md、docs/team-tasks.md 和 docs/demo-notes.md，再查看 demo/index.html。reference/ 中有最终 10 页项目书、竞赛原始指南、截图和导出的作品示例。
 
-Demo 保留，正式 app/ 已实现完整编辑、制作、1024 PNG、两次会话对比、Worker、草稿及本地“我的作品”。每次完成自动保存，可重命名、删除、查看及继续编辑；继续制作另存新 ID。会话对比及未成功保存的结果刷新清空，已保存作品和草稿保留。Git main 已有基线和开发提交，没有远端。
+Demo 保留，正式 app/ 已实现完整编辑、制作、1024 PNG、两次会话对比、Worker、草稿及本地“我的作品”。每次完成自动保存，可重命名、删除、查看及继续编辑；继续制作另存新 ID。会话对比及未成功保存的结果刷新清空，已保存作品和草稿保留。Git main 已有基线和开发提交，origin 指向公开仓库 https://github.com/ChadBi/bai-indigo.git。之后的推送与发布按当前任务授权执行。
 
-团队已组齐，主要开发由我和你完成。给大一队友留两到三个独立小模块：染艺寻踪的资料展示、白乡故事的图文展示、工艺术语与常见问题区。你负责先搭好统一工程、公共组件、数据类型和样例，让他们能用 vibecoding 完成自己目录中的模块。核心引擎、状态、作品库、全局样式、路由与集成由我们完成。
+团队有两位队员，主要开发由我和你完成。队员 1 完善染艺寻踪资料展示，队员 2 完善白乡故事图文展示；工艺术语与常见问题由我们完成。工程、公共组件、类型和样例已建立。队员按 docs/member-tasks.md、docs/ai-coding-guide.md、docs/git-basics.md 在自己的分支工作，通过 PR 交付，由主开发者审查与合并。核心引擎、状态、作品库、全局样式、路由与集成由我们完成。
 
 按上一轮提出的架构基线推进：Vue 3 + TypeScript + Vite + Vue Router + Pinia，Canvas 扎染引擎，Web Worker 计算，结构化文化资料，IndexedDB 本地作品库，IGA Pages 静态部署。第一版围绕六个已确定模块完成创作与文化体验。
 

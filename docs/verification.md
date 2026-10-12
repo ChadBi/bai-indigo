@@ -104,3 +104,13 @@ npm run test:app
 输出为忽略目录 tests/test-results/ 下的 works-desktop.png、works-mobile.png、works-download.png 和 works-pending.png。截图中异常记录提示来自测试注入的数据，不是个人浏览器中的作品。该脚本对测试库写入异常草稿和作品，须在本地测试服务运行。
 
 成功保存的作品位于当前浏览器的此网站数据中，清除网站数据会删除作品和草稿。失败结果只在当前应用内存中保留，刷新会丢失。方案文件备份／导入导出、多标签页冲突合并、跨设备同步、真实手机及更多浏览器兼容性仍未完成。
+
+## GitHub 仓库与协作文档检查（2026-10-12）
+
+- 使用已登录的 ChadBi 账号创建公开仓库 https://github.com/ChadBi/bai-indigo，创建响应与无凭据公开 API 均确认 private 为 false。
+- 上传前检查已跟踪文件与完整提交历史：未发现常见 GitHub 令牌、访问密钥或私钥格式；环境文件、.iga 登录配置、node_modules 和构建产物未纳入历史。该检查针对常见格式，不代表穷尽所有敏感信息。
+- 用户明确同意公开项目文件及完整历史后，关联 origin 并推送 main。git ls-remote 返回的 main SHA 与本地 b5fa6d7 完整 SHA 相同，公开 API 确认默认分支为 main。
+- 新增根 README 和 docs/git-basics.md，将任务单、AI coding 指南及两位队员 README 改为 clone、任务分支、提交、推送、PR 审查与合并流程，同步接手文件中的仓库与分工状态。
+- 对更新文档执行相对链接、代码块闭合和 UTF-8 文本检查，git diff --check 通过。模块 props／事件保持原约定，未修改业务组件、Demo、reference、依赖或锁文件；保留原有指南编辑并继续更新。
+- 本次为文档与仓库操作，没有重跑应用单元测试、构建或浏览器检查，也没有实际演练队员 PR 和冲突。上述命令示例不作为应用验收结果。
+- 两位队员的协作者邀请、main 保护规则与 GitHub Actions 尚未配置；GitHub 上传没有触发 IGA 发布。

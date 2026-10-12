@@ -2,6 +2,8 @@
 
 当前两位队员中，队员 1 负责本模块。先读 [两位队员任务单](../../../../docs/member-tasks.md) 和 [AI coding 指南与提示词](../../../../docs/ai-coding-guide.md)。
 
+按 [Git 教程](../../../../docs/git-basics.md) clone 团队仓库，从最新 main 创建 `member-culture` 分支，检查后推送自己的分支并提交 PR。主开发者负责审查与合并，不直接推送 main。
+
 ## 修改范围
 
 只修改本目录中的局部组件、纯函数和必要的纯函数测试。入口 `CultureModule.vue` 已接入 `/culture`。

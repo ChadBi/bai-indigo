@@ -2,6 +2,8 @@
 
 当前共有两位队员：队员 1 负责 A 染艺寻踪，队员 2 负责 B 白乡故事；C 术语与常见问题由主开发者完成。执行任务见 [两位队员任务单](member-tasks.md)，上手与提示词见 [AI coding 指南](ai-coding-guide.md)。
 
+仓库：[ChadBi/bai-indigo](https://github.com/ChadBi/bai-indigo)。队员独立 clone，在自己的分支开发，通过 PR 交付；主开发者审查并合并到 main。概念、命令和冲突处理见 [Git 教程](git-basics.md)。
+
 工程、共享组件、类型和样例现已建立。队友可使用下方对应模块 README 开始，完整筛选和展示完善仍由队友完成，不把核心开发进度绑定在新生模块上。
 
 - A：[culture/README.md](../app/src/modules/culture/README.md)，组件 CultureModule 接收 entries、sources。
@@ -20,9 +22,9 @@
 
 ## 共用规则
 
-- 只修改各自模块目录及约定的组件测试。
+- 只修改各自模块目录、纯函数及必要的纯函数测试。
 - 使用已有组件、类型与样式变量，不改依赖、全局 CSS、路由、store、engine 或存储服务。
-- 数据从 props 或明确的内容读取接口获得，不直接修改创作状态。
+- 数据从 props 获得，不直接调用内容仓库或修改创作状态。
 - 导航或选择纹样通过类型明确的事件交给主系统。
 - 使用真实提供的数据，不让 AI 编造历史、寓意、人物经历和采访。
 - 接入前自行检查列表、详情、空状态、图片失败及手机布局。

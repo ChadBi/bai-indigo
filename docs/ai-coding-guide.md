@@ -1,12 +1,12 @@
 # AI coding 上手指南
 
-先读 [两位队员任务单](member-tasks.md)，确认自己的模块。队员 1 完成染艺寻踪，队员 2 完成白乡故事；术语与常见问题由主开发者完成。
+先读 [两位队员任务单](member-tasks.md)，确认自己的模块。队员 1 完成染艺寻踪，队员 2 完成白乡故事；术语与常见问题由主开发者完成。Git 概念及完整协作命令见 [Git 基础与 GitHub 协作](git-basics.md)。
 
 ## 1. 先把现有工程跑起来
 
-拿到最新的 bai-indigo 工程副本，确认存在 `app/` 和 `app/pnpm-lock.yaml`。每人使用独立副本，避免两人同时改同一个目录。当前旧移交 ZIP 不包含最新正式工程。
+先按 [Git 教程](git-basics.md) clone [ChadBi/bai-indigo](https://github.com/ChadBi/bai-indigo)，从最新 main 创建自己的任务分支，再进入工程。每人在自己的电脑上使用独立 clone，确认存在 `app/` 和 `app/pnpm-lock.yaml`，不用 ZIP 替换已有仓库。
 
-本指南对应第三阶段业务代码 `8cb7636` 及本次文档。向主开发者确认交付包名／日期或提交号，并确认包含项目约定、接手文档、架构、任务单、指南、共享类型／组件和模块 README；后续以主开发者的新交付标识为准。
+第三阶段业务基线为 `8cb7636`，实际任务以最新 main 和任务单为准。完整仓库包含项目约定、接手文档、架构、指南、共享类型／组件和模块 README。
 
 使用 Node.js 24.11 或以上版本、pnpm 11.25.0。先检查：
 
@@ -16,7 +16,7 @@ pnpm --version
 git status --short
 ```
 
-版本不符合或 pnpm 找不到时，联系主开发者协助准备环境。Git 报“不是仓库”时，先确认副本是否本来就不带 Git：主开发者确认的无 Git 副本仍可正常开发，跳过分支／提交步骤，按第 7 节交付文件；其他情况先核对副本，不自行初始化替代原历史。不要让 AI 删除锁文件、重建 app 或升级整套依赖来解决环境问题。
+版本不符合或 pnpm 找不到时，联系主开发者协助准备环境。Git 报“不是仓库”时检查是否进入 clone 的根目录；下载 ZIP 不能代替 clone，不自行 git init 重建团队历史。已有 ZIP 内的改动先备份并交给主开发者协助迁移，不覆盖新 clone。不要让 AI 删除锁文件、重建 app 或升级整套依赖来解决环境问题。
 
 在工程根目录的终端执行：
 
@@ -167,52 +167,27 @@ AI 理解正确后，选择一个小步骤让它实现。不要只说“全部�
 只报告真实结果；现有核心测试通过不能当成本模块界面已经验证。
 ```
 
-## 7. Git 与交付
+## 7. GitHub 协作与交付
 
-如果副本保留了本地 Git，开始任务前在工程根目录执行：
+完整命令及冲突处理见 [Git 教程](git-basics.md)。流程为：clone → 更新 main → 建任务分支 → 开发与检查 → commit → push 自己的分支 → PR → 修改反馈 → 主开发者合并 → 更新 main。
 
-```sh
-git status --short
+队员 1 首项任务用 `member-culture`，队员 2 用 `member-stories`。已经在任务分支上就继续使用它，不重复新建；新任务从最新 main 建新分支。不在 main 上开发，不直接向 main 推送，不自行合并 PR。
+
+每次让 AI 修改前先确认当前分支和工作区，已有其他改动不覆盖、不丢弃。提交时只 git add 自己的模块目录，检查 git diff --cached 后再 commit。node_modules、构建产物、环境文件和凭据不提交；锁文件由主开发者维护。
+
+让 AI 准备提交和 PR 的提示词：
+
+```text
+我已在 GitHub 协作仓库 ChadBi/bai-indigo 中开发，本次负责【culture 或 stories，填一个】。
+请先只读检查 git status、当前分支、origin 地址和本次 diff。
+确认当前为我的任务分支，origin 为 https://github.com/ChadBi/bai-indigo.git。
+主开发者只允许我修改分配目录，不提交其他改动、依赖、构建产物或凭据。
+先展示拟提交文件、检查结果、提交说明和 PR 正文供我核对。
+没有授权时不 commit、不 push、不创建 PR；不向 main 推送、不合并 PR、不强制推送。
+PR 写清功能、真实验证、截图及缺少的数据；没有运行的检查写“未执行”。
 ```
 
-工作区干净时，队员 1 使用 `member-culture`，队员 2 使用 `member-stories`。
-
-队员 1 在自己副本的工程根目录执行：
-
-```sh
-git switch -c member-culture
-```
-
-队员 2 在自己副本的工程根目录执行：
-
-```sh
-git switch -c member-stories
-```
-
-分支已存在时用 `git switch 分支名`，不要重复创建。发现已有他人修改，不覆盖、不丢弃，先联系主开发者。
-
-改完后检查范围：
-
-```sh
-git status --short
-git diff --stat
-git diff -- app/src/modules/culture/
-# 队员 2 查看 app/src/modules/stories/
-```
-
-不使用 git reset --hard、git clean 或整目录替换清理工作区。不要直接复制另一人的 app/、覆盖 package.json 或锁文件。
-
-如需提交，在根目录只暂存自己的目录。例如队员 1：
-
-```sh
-git add app/src/modules/culture/
-git diff --cached --stat
-git commit -m "feat: improve culture presentation"
-```
-
-队员 2 改为 stories 目录和对应提交说明。当前没有远端地址，不自行运行推送或添加远端；把自己的模块文件或本次提交交给主开发者整合。
-
-没有 Git 的副本，至少保留开始时的完整工程备份，并只交付自己的模块目录。需要共享配置修改时先说明需求，交由主开发者处理。
+你核对后，可明确让 AI 提交并推送自己的分支、创建目标为 main 的 PR。PR 请求主开发者审查；反馈在同一分支修改后继续提交推送，无需另开 PR。公共代码或正式资料需求写在 PR 中，不越界修改。
 
 交付前提示词：
 
@@ -236,7 +211,7 @@ git commit -m "feat: improve culture presentation"
 桌面/手机/详情截图：
 资料来源与图片许可：
 缺少的数据或未完成项：
-提交号或交付目录：
+任务分支、提交号和 PR 链接：
 ```
 
 ## 8. 遇到这些情况交给主开发者
