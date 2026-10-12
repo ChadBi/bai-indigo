@@ -27,14 +27,17 @@ const target = process.env.APP_URL || "http://127.0.0.1:5173";
     page.on("worker", (worker) => workers.push(worker.url()));
     await page.goto(target, { waitUntil: "networkidle" });
     await page.waitForFunction(
-      () => Number(document.querySelector("canvas")?.dataset.renderId) > 0,
+      () =>
+        Number(
+          document.querySelector(".dye-preview canvas")?.dataset.renderId,
+        ) > 0,
     );
     const canvas = page.getByLabel("当前方案的数字扎染效果");
     const preview = () => canvas.evaluate((element) => element.toDataURL());
     const waitPreview = () =>
       page.waitForFunction(
         () =>
-          document.querySelector(".canvas-stage")?.getAttribute("aria-busy") ===
+          document.querySelector(".dye-preview")?.getAttribute("aria-busy") ===
           "false",
       );
     const deepPreview = await preview();
@@ -79,7 +82,7 @@ const target = process.env.APP_URL || "http://127.0.0.1:5173";
     await page.getByRole("button", { name: "中染", exact: true }).click();
     await page.getByRole("button", { name: "重新生成", exact: true }).waitFor();
     assert.equal(
-      await page.locator(".canvas-stage").getAttribute("aria-busy"),
+      await page.locator(".dye-preview").getAttribute("aria-busy"),
       "false",
     );
     await page.evaluate(() => {
@@ -117,11 +120,11 @@ const target = process.env.APP_URL || "http://127.0.0.1:5173";
         return put.apply(this, args);
       };
     });
-    await page.getByRole("button", { name: "中染", exact: true }).click();
+    await page.getByRole("button", { name: "深染", exact: true }).click();
     await page.getByText(/草稿保存失败/).waitFor();
     assert.equal(
       await page
-        .getByRole("button", { name: "中染", exact: true })
+        .getByRole("button", { name: "深染", exact: true })
         .getAttribute("aria-pressed"),
       "true",
     );

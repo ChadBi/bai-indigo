@@ -18,14 +18,14 @@
 
 ## 当前可以运行什么
 
-正式工程位于 `app/`，已接通六个页面入口、Worker 染色预览和 IndexedDB 草稿保存／恢复。在 `app/` 使用 Node.js 24.11+、pnpm 11.25.0：
+正式工程位于 `app/`，已接通六个页面入口、完整画布编辑／制作流程、1024×1024 PNG 下载、两次染作对比、Worker 预览和 IndexedDB 草稿保存／恢复。在 `app/` 使用 Node.js 24.11+、pnpm 11.25.0：
 
 ```sh
 pnpm install --frozen-lockfile
 pnpm dev
 ```
 
-启动与检查详见 [app/README.md](app/README.md)。作品库、完整布面编辑、制作动画、对比和导出尚未迁移，作品页会明确说明。队友从 [docs/team-tasks.md](docs/team-tasks.md) 和各模块 README 开始。
+启动与检查详见 [app/README.md](app/README.md)。成品对比保留最近两次会话结果，刷新后清空；草稿可恢复。作品库、命名与重新打开尚未实现，作品页会明确说明。队友从 [docs/team-tasks.md](docs/team-tasks.md) 和各模块 README 开始。
 
 直接用浏览器打开 `demo/index.html`，无需构建或服务端。需要 HTTP 预览时，可在项目根目录使用可用的静态文件服务，例如：
 

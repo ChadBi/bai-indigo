@@ -91,4 +91,123 @@ describe("studio recovery and saves", () => {
     );
     store.dispose();
   });
+  it("groups drag and radius edits and cancels uncommitted additions", async () => {
+    const repo = repository(),
+      store = createStudioStore(repo)();
+    await store.initialize();
+    const id = store.params.knots[0].id,
+      original = store.params.knots[0].x;
+    store.beginEdit();
+    store.selectKnot(id);
+    store.moveKnot(id, 0.4, 0.4, false, false, true);
+    store.moveKnot(id, 0.5, 0.5, false, false, true);
+    await vi.advanceTimersByTimeAsync(1000);
+    expect(repo.writeDraft).not.toHaveBeenCalled();
+    expect(store.history).toHaveLength(0);
+    store.commitEdit();
+    expect(store.history).toHaveLength(1);
+    store.undo();
+    expect(store.params.knots[0].x).toBe(original);
+    store.selectKnot(null);
+    store.setRadius(0.2, true);
+    store.setRadius(0.21, true);
+    store.setRadius(0.22, true);
+    store.commitEdit();
+    expect(store.history).toHaveLength(1);
+    store.undo();
+    expect(store.defaultRadius).toBe(0.13);
+    store.beginEdit();
+    store.addKnot(0.6, 0.6, true);
+    store.cancelEdit();
+    expect(store.params.knots).toHaveLength(4);
+    expect(store.selectedId).toBeNull();
+    store.dispose();
+  });
+  it("ignores noops, caps history and knot count, and distinguishes radius scope", async () => {
+    const store = createStudioStore(repository())();
+    await store.initialize();
+    store.selectKnot(store.params.knots[0].id);
+    store.setDepth("deep");
+    store.beginEdit();
+    store.commitEdit();
+    expect(store.history).toHaveLength(0);
+    store.setRadius(0.2);
+    expect(store.params.knots[0].radius).toBe(0.2);
+    expect(store.params.knots[1].radius).toBe(0.13);
+    expect(store.defaultRadius).toBe(0.13);
+    store.selectKnot(null);
+    store.setRadius(0.18);
+    expect(store.params.knots.every((k) => k.radius === 0.18)).toBe(true);
+    expect(store.defaultRadius).toBe(0.18);
+    for (let i = 0; i < 40; i++) store.setDepth(i % 2 ? "deep" : "light");
+    expect(store.history).toHaveLength(30);
+    while (store.params.knots.length < 12) store.addKnot();
+    const length = store.history.length;
+    expect(store.addKnot()).toBeNull();
+    expect(store.history).toHaveLength(length);
+    store.dispose();
+  });
+  it("moves a reflected knot through the original id and clamps coordinates", async () => {
+    const store = createStudioStore(repository())();
+    await store.initialize();
+    const id = store.params.knots[0].id;
+    store.setFold("quarter");
+    store.moveKnot(id, 0.8, 0.9, true, true);
+    expect(store.params.knots[0].x).toBeCloseTo(0.2);
+    expect(store.params.knots[0].y).toBeCloseTo(0.1);
+    store.moveKnot(id, -4, 10);
+    expect(store.params.knots[0].x).toBe(0.025);
+    expect(store.params.knots[0].y).toBe(0.975);
+    store.dispose();
+  });
+  it("locks every edit action during production and isolates completed snapshots", async () => {
+    const store = createStudioStore(repository())();
+    await store.initialize();
+    const snapshot = store.beginProcess()!,
+      before = JSON.stringify(store.params);
+    store.addKnot();
+    store.clearKnots();
+    store.setDepth("light");
+    store.selectPattern("flower");
+    store.undo();
+    await store.resetDraft();
+    expect(JSON.stringify(store.params)).toBe(before);
+    store.updateProcess("unfold", 1);
+    store.finishProcess({
+      params: snapshot,
+      image: new Blob(),
+      thumbnail: new Blob(),
+      createdAt: new Date().toISOString(),
+    });
+    store.reedit();
+    store.setDepth("light");
+    expect(store.currentResult?.params.depth).toBe("deep");
+    for (let i = 0; i < 2; i++) {
+      const params = store.beginProcess()!;
+      store.updateProcess("unfold", 1);
+      store.finishProcess({
+        params,
+        image: new Blob(),
+        thumbnail: new Blob(),
+        createdAt: new Date().toISOString(),
+      });
+      store.reedit();
+    }
+    expect(store.results).toHaveLength(2);
+    store.dispose();
+  });
+  it("undo during a gesture cancels that gesture without consuming an older edit", async () => {
+    const store = createStudioStore(repository())();
+    await store.initialize();
+    const id = store.params.knots[0].id;
+    store.setFold("half");
+    store.moveKnot(id, 0.4, 0.4, false, false, true);
+    store.undo();
+    expect(store.params.knots[0].x).toBe(0.27);
+    expect(store.params.fold).toBe("half");
+    expect(store.history).toHaveLength(1);
+    store.undo();
+    expect(store.params.fold).toBe("none");
+    store.dispose();
+  });
 });

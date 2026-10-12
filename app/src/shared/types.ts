@@ -26,6 +26,24 @@ export interface Draft {
   templateId: TemplateSelection;
   defaultRadius: number;
 }
+export type StudioPhase =
+  | "edit"
+  | "preparing"
+  | "dye"
+  | "oxidize"
+  | "tied"
+  | "unfold"
+  | "done";
+export type EditSnapshot = Pick<
+  Draft,
+  "params" | "templateId" | "defaultRadius"
+>;
+export interface SessionDyeResult {
+  readonly params: DyeParams;
+  readonly image: Blob;
+  readonly thumbnail: Blob;
+  readonly createdAt: string;
+}
 export interface DyeWork {
   id: string;
   name: string;

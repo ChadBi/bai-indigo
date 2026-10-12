@@ -735,3 +735,320 @@ dialog::backdrop {
     padding-top: 20px;
   }
 }
+.preset-icon {
+  width: 48px;
+  height: 30px;
+  stroke: var(--indigo);
+  stroke-width: 1.1;
+  fill: none;
+}
+.editor-stage {
+  padding: 20px 24px;
+  background: #f1f3f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+}
+.editor-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  gap: 8px;
+  margin-bottom: 14px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.editor-toolbar > div {
+  display: flex;
+  gap: 3px;
+}
+.editor-toolbar .button {
+  font-size: 12px;
+  min-height: 30px;
+  padding: 4px 6px;
+}
+.editor-stage .cloth-frame {
+  max-width: 430px;
+}
+.editor-stage canvas {
+  touch-action: none;
+  cursor: crosshair;
+}
+.editor-stage canvas[data-phase]:not([data-phase="edit"]) {
+  cursor: default;
+}
+.editor-caption {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 430px;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 10px;
+}
+.accessible-editor {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  font-size: 12px;
+  margin-top: 16px;
+}
+.accessible-editor .button {
+  font-size: 12px;
+  padding: 6px 12px;
+  min-height: 34px;
+}
+.accessible-editor select {
+  max-width: 140px;
+  font: inherit;
+  background: var(--white);
+  border: 1px solid #b9c8d2;
+  padding: 6px;
+  color: var(--deep);
+}
+.making-steps {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  gap: 16px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.making-steps li {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  white-space: nowrap;
+}
+.making-steps li > span {
+  border: 1px solid #b9c8d2;
+  border-radius: 50%;
+  width: 22px;
+  height: 22px;
+  display: grid;
+  place-items: center;
+  font:
+    12px Georgia,
+    serif;
+}
+.making-steps .active {
+  color: var(--deep);
+}
+.making-steps .active > span {
+  background: var(--deep);
+  color: white;
+  border-color: var(--deep);
+}
+.making-steps .done {
+  color: var(--indigo);
+}
+.process-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  width: 100%;
+  margin-top: 16px;
+}
+.process-progress {
+  height: 4px;
+  width: 100%;
+  max-width: 430px;
+  margin: 16px 0 0;
+  accent-color: var(--indigo);
+}
+.studio-notice {
+  font-size: 12px;
+  margin: 12px 0 0;
+  width: 100%;
+  text-align: center;
+}
+.dye-preview {
+  margin-bottom: 24px;
+  width: 100%;
+  flex-shrink: 0;
+}
+.dye-preview canvas {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  border: 1px solid var(--line);
+}
+.preview-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 12px;
+  margin-bottom: 12px;
+}
+.preview-heading > span:last-child {
+  color: var(--muted);
+  font-size: 10px;
+}
+.dye-preview p {
+  font-size: 12px;
+  margin-top: 12px;
+}
+.studio-explanation .eyebrow {
+  font-size: 9px;
+  letter-spacing: 1.5px;
+}
+.studio-explanation h2 {
+  font-size: 23px;
+  margin: 15px 0 12px;
+}
+.studio-explanation p {
+  font-size: 12px;
+}
+.result-actions {
+  display: grid;
+  gap: 10px;
+  margin-top: auto;
+  padding-top: 24px;
+}
+.result-actions small {
+  font-size: 11px;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.8;
+}
+.comparison {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+.comparison figure {
+  margin: 0;
+}
+.comparison img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: contain;
+}
+.comparison figcaption {
+  font-size: 14px;
+  margin-top: 10px;
+}
+.comparison p {
+  font-size: 12px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.skip-link:not(:focus) {
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+@media (min-width: 1101px) and (max-height: 800px) {
+  .editor-stage {
+    padding: 18px;
+  }
+  .editor-stage .cloth-frame,
+  .editor-caption {
+    max-width: 360px;
+  }
+  .studio-explanation {
+    padding: 20px 18px;
+  }
+  .dye-preview {
+    margin-bottom: 18px;
+  }
+  .preset-icon {
+    height: 25px;
+  }
+  .accessible-editor {
+    margin-top: 12px;
+  }
+  .process-actions {
+    margin-top: 12px;
+  }
+}
+@media (min-width: 701px) and (max-width: 1100px) {
+  .studio-explanation {
+    grid-template-columns: 200px 1fr 180px;
+    align-items: start;
+  }
+  .dye-preview {
+    grid-column: 1;
+    grid-row: 1/5;
+    margin: 0;
+  }
+  .studio-explanation .eyebrow {
+    grid-column: 2;
+  }
+  .studio-explanation h2 {
+    grid-column: 2;
+  }
+  .studio-explanation p,
+  .studio-explanation a {
+    grid-column: 2;
+  }
+  .result-actions {
+    grid-column: 3;
+    grid-row: 1/5;
+    padding: 0;
+    margin: 0;
+  }
+}
+@media (max-width: 700px) {
+  .studio-heading {
+    display: block;
+  }
+  .making-steps {
+    justify-content: space-between;
+    gap: 4px;
+    margin-top: 18px;
+    font-size: 11px;
+  }
+  .making-steps li {
+    gap: 4px;
+  }
+  .making-steps li > span {
+    width: 19px;
+    height: 19px;
+  }
+  .editor-stage {
+    grid-row: 1;
+    padding: 16px 18px 22px;
+  }
+  .editor-toolbar {
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+  .editor-caption {
+    font-size: 10px;
+  }
+  .studio-explanation {
+    display: flex;
+  }
+  .dye-preview {
+    width: min(100%, 260px);
+    align-self: center;
+  }
+  .comparison {
+    grid-template-columns: 1fr;
+  }
+  .result-actions {
+    width: 100%;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 8px;
+  }
+  .result-actions small {
+    grid-column: 1/-1;
+  }
+  .studio-explanation h2 br {
+    display: none;
+  }
+}

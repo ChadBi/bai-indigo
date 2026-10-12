@@ -62,7 +62,7 @@ export const patterns: readonly PatternTemplate[] = [
   {
     id: "free",
     title: "自由扎结",
-    summary: "空白方案。自由加点将在编辑功能迁移后开放。",
+    summary: "从一方空白布开始，自由布置与移动扎结。",
     kind: "original",
     sourceRefs: [],
     defaultRadius: 0.13,

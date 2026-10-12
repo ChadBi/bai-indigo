@@ -1,6 +1,6 @@
 # 正式系统架构与实施顺序
 
-本文件是开发基线。app/ 已完成工程骨架、纯像素引擎、真实 Worker 预览、IndexedDB 草稿和队友模块样例；完整交互及作品库仍在后续实施范围。
+本文件是开发基线。app/ 已完成工程骨架、完整 Demo 交互、纯像素引擎、Worker、IndexedDB 草稿、PNG 下载、会话对比和队友模块样例；持久化作品库与完整内容仍在后续实施范围。
 
 ## 技术选择
 
@@ -61,6 +61,7 @@ app/src/
 - DyeParams：schemaVersion、engineVersion、seed、style、fold、depth、knots；每个 knot 有稳定 id、归一化 x/y 和 radius。
 - DyeWork：id、name、createdAt、updatedAt、params、thumbnail Blob、image Blob。
 - Draft：params、updatedAt、templateId、defaultRadius；恢复参数后重新计算预览，不恢复半截动画。
+- SessionDyeResult：冻结的 params、image Blob、thumbnail Blob、createdAt；Pinia 仅保留最近两次完成结果，不写入数据库。
 - CultureEntry / StoryEntry：id、title、summary、body、images、sourceRefs、relatedPatternIds；标明 traditional 或 original 类型。
 
 坐标不依赖屏幕像素。seed 与 engineVersion 一起保存，使历史方案有明确的重现条件。生成与保存的数据需要校验范围和版本。
@@ -73,9 +74,13 @@ IndexedDB 使用项目专属名称 `bai-indigo`，以免通用 Demo 域名上的
 
 stores/studio.ts 先读取和校验草稿，再开启参数编辑与自动保存。services/storage.ts 建立 bai-indigo v1 的 drafts、works 仓库，串行提交草稿，失败后允许重试。未知／损坏草稿不会自动覆盖；明确重置才删除。500ms 自动保存尚未提交时关页可能丢失最后修改；多标签页冲突合并尚未实现。
 
-以下制作状态与导出是下一阶段的迁移目标：
+当前完整制作与下载实现：
 
-状态流程：编辑 → 浸染 → 氧化 → 等待拆线 → 展开 → 完成。动画表达过程，最终结果由参数决定。
+状态流程：编辑 → 准备图像 → 浸染 → 氧化 → 等待拆线 → 展开 → 完成。准备阶段冻结参数并计算、编码 1024 成品；浸染／氧化总计 3.4 秒，62% 转入氧化；拆线展开 1.1 秒。动画表达过程，不改变成品。减少动态效果模式仍保留拆线动作。
+
+services/process.ts 使用独立成品 Renderer、AbortSignal 和任务代次，过滤过期计算及编码；退出时取消 rAF 和任务。modules/studio/drawing.ts 绘制白布、扎结及制作画面。DyeCanvas 预览最多每 80ms 发起一次；成品预览、下载均使用同一次计算的像素。
+
+编辑快照覆盖参数、templateId、defaultRadius，历史上限 30；连续拖动／滑杆只提交一次，选择和无变化操作不入历史。原始点稳定 ID 用于选择与映射点反算；指针取消回退整个当前事务。草稿结构和版本未改变。
 
 渲染服务接收参数、目标尺寸和 requestId，返回像素数据或错误。预览使用小尺寸，正式导出先做 1024×1024；更高分辨率按实际性能扩展。过期计算结果不得覆盖最新参数。生成错误、取消任务及退出页面都要正确结束 loading 状态。
 
@@ -90,7 +95,7 @@ ContentRepository 读取资料；WorksRepository 提供草稿和作品的读写�
 ## 顺序与完成标准
 
 1. 骨架：已建立 app/、锁文件、路由、公共组件、类型、队友入口，并接通 Worker 和草稿。
-2. 迁移：保留 Demo 全部交互，继续迁移布面编辑、制作过程与结果操作。
+2. 迁移：已接通布面编辑、制作过程、1024 PNG 和两次会话对比；Demo 保留。
 3. 闭环：草稿恢复、作品库、命名与删除、方案导出/导入、继续编辑。
 4. 内容：工艺教学、纹样解释与文化卡片接入当前步骤。
 5. 队友：合并各展示模块，检查数据、样式和响应式。
