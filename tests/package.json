@@ -1,0 +1,6 @@
+{
+  "name": "bai-indigo-demo-checks",
+  "private": true,
+  "scripts": {"test:demo": "node test-demo.cjs"},
+  "devDependencies": {"playwright": "1.62.1"}
+}

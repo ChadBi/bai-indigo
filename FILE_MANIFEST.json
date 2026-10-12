@@ -1,0 +1,128 @@
+{
+  "project": "bai-indigo",
+  "englishName": "Bai Indigo",
+  "preparedAt": "2026-10-12",
+  "timezone": "Asia/Shanghai",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 115,
+      "sha256": "aaa3012c3381739c357bb62a61689aa145365ff7f09d34d1f7902b34c72119a3"
+    },
+    {
+      "path": "AGENTS.md",
+      "bytes": 2556,
+      "sha256": "b0d05424061142eef9de8be3bf3e4c1d1a90fcc403862316f1fcb0b328525e44"
+    },
+    {
+      "path": "CODEX_PROMPT.md",
+      "bytes": 2633,
+      "sha256": "6b44fe4c692f4762f70e3e1f7408064075c383fda636b71b7182060451561541"
+    },
+    {
+      "path": "demo/index.html",
+      "bytes": 34803,
+      "sha256": "a20f9e3575ec4158c79162b878b0b996dacf216b6bf28ab2b7b6df72d4319377"
+    },
+    {
+      "path": "deployment/iga-project-reference.json",
+      "bytes": 425,
+      "sha256": "f1db390e3ee54fc7b780648860bd2ee1b06f60a694da24c692007e12a2cc39fb"
+    },
+    {
+      "path": "docs/architecture.md",
+      "bytes": 4934,
+      "sha256": "f0f1e0eb2611e11b3d0144ce22f64ae0a3f545ac62e0c64a6e35a4a86ff755f8"
+    },
+    {
+      "path": "docs/demo-notes.md",
+      "bytes": 1511,
+      "sha256": "2217167ff99f4147583423667d009625f7fa32ffdc171b36aab893e96f2fcb77"
+    },
+    {
+      "path": "docs/product-scope.md",
+      "bytes": 2197,
+      "sha256": "3c6db42fb43e2912858fbc92a93fe3aef6871498255bb1adfdf053a98f2e526c"
+    },
+    {
+      "path": "docs/sources.md",
+      "bytes": 1589,
+      "sha256": "17e56476d9b4141f5fe01cbdd74316fdf2f86d904480dbffe0ec7e45cb86701b"
+    },
+    {
+      "path": "docs/team-tasks.md",
+      "bytes": 2220,
+      "sha256": "475fe77d12bd99afb563206fb4341a62149096bbb431f76f827759ccf68fd6f6"
+    },
+    {
+      "path": "docs/verification.md",
+      "bytes": 2441,
+      "sha256": "ad19fda40dc205837887babf7bf871738435708d15f883415ac7f59cbfa234d2"
+    },
+    {
+      "path": "HANDOFF.md",
+      "bytes": 4962,
+      "sha256": "bdcb5dbb17cb069eb4eafbbad74b838b5f49222f56695066ca75af57662c872f"
+    },
+    {
+      "path": "reference/competition-guide-2026.pdf",
+      "bytes": 7732204,
+      "sha256": "2aa077845e98468d4571687637480d83ce900d2f18a26b718cdf00491d42f52e"
+    },
+    {
+      "path": "reference/project-brief.docx",
+      "bytes": 2257044,
+      "sha256": "4bf305094abe171dbf5b83904aba5d07ddb95ca90ca304c3e91f4d19f6a68e1c"
+    },
+    {
+      "path": "reference/project-brief.pdf",
+      "bytes": 916820,
+      "sha256": "167c2567e0e82ca28355681bf7d45405277b330baabda40e2a5d809fa1844761"
+    },
+    {
+      "path": "reference/sample-dye-export.png",
+      "bytes": 977817,
+      "sha256": "a4f8da7471d47ab66effd7388f3ea0a23f1e5d229717683cf9220cee6768bc94"
+    },
+    {
+      "path": "reference/screenshots/comparison.png",
+      "bytes": 502881,
+      "sha256": "c8867535f46b1aba9b67b800aae7c951cef545a952e9f30c3ede60aa9d14464b"
+    },
+    {
+      "path": "reference/screenshots/finished.png",
+      "bytes": 362723,
+      "sha256": "f23e3a5cc9e54b08bbb6c8caac6d0bc1dba0b1b6c61dce9f8c09f0a5da435e65"
+    },
+    {
+      "path": "reference/screenshots/initial.png",
+      "bytes": 324213,
+      "sha256": "8e7fc5839e5eae17c54ca1a06de62ddfe723bf30ebbfd080f2cba44d1de9f3b5"
+    },
+    {
+      "path": "reference/screenshots/laptop.png",
+      "bytes": 266654,
+      "sha256": "05ab29c3d0c1e121a6356ec3ee552f7dba8fcd540d6ce9a84a3d28e0aa359ce8"
+    },
+    {
+      "path": "reference/screenshots/mobile.png",
+      "bytes": 183395,
+      "sha256": "757a3e900a57e2fb0b891afc83cfebc94ba9028eadcc18c1f92a82c68db30ece"
+    },
+    {
+      "path": "START_HERE.md",
+      "bytes": 2706,
+      "sha256": "a4b14f9ee242124ba112ef798bd290625997571e758d8f88aa2bcb732083eef0"
+    },
+    {
+      "path": "tests/package.json",
+      "bytes": 155,
+      "sha256": "60a53a5af753bb62e1b34bf94940b11ef96b4a385ab5018b0303bbb640d13d0b"
+    },
+    {
+      "path": "tests/test-demo.cjs",
+      "bytes": 6154,
+      "sha256": "a7b679d26d3630bb8f1930e0de8dabef5b8a66974a405769c1f7e449decda8bb"
+    }
+  ]
+}

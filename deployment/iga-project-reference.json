@@ -1,0 +1,12 @@
+{
+  "provider": "iga-pages",
+  "projectId": "bvpmpkiedf",
+  "reportedProjectName": "demo",
+  "previousProjectName": "pinanjia-demo",
+  "deploymentMode": "upload_v2",
+  "customDomain": "https://demo.chaina1.com/",
+  "checkedAt": "2026-10-12T16:39:04+08:00",
+  "observedStatus": "HTTP 200, current demo content matches local source",
+  "otherProjectNotCurrentTarget": "n7ph8ajy22",
+  "activateLinkConfigAutomatically": false
+}

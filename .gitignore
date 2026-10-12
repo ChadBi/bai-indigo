@@ -1,0 +1,13 @@
+node_modules/
+.iga/
+.env
+.env.*
+!.env.example
+test-results/
+tests/test-results/
+playwright-report/
+app/dist/
+*.log
+/Bai-Indigo_移交材料包.zip
+coverage/
+*.tsbuildinfo
