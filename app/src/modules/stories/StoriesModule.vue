@@ -20,12 +20,13 @@ function select(id: PatternId) {
 </script>
 <template>
   <div class="content-grid">
-    <ContentCard
-      v-for="entry in entries"
-      :key="entry.id"
+    <div v-for="entry in entries" :key="entry.id" class="story-card">
+    <span class="eyebrow">{{ entry.category }}</span>
+<ContentCard 
       :entry="entry"
       @open="selected = entry"
     />
+  </div>
   </div>
   <EmptyState
     v-if="!entries.length"
