@@ -6,6 +6,7 @@ import type {
   SourceRef,
 } from "../shared/types";
 import sampleDye from "../assets/sample-dye-export.png";
+import butterflyField from "../assets/butterfly-field.jpg.jpg";
 
 export const sources: readonly SourceRef[] = [
   {
@@ -15,6 +16,14 @@ export const sources: readonly SourceRef[] = [
     url: "https://www.ihchina.cn/news_1_details/11139.html",
     accessedAt: "2026-10-12",
     note: "文化样例摘述工艺与配色；未使用文章图片。",
+  },
+  {
+    id: "journal-butterfly",
+    title: "大理白族扎染蝴蝶纹饰的图像学研究（论文选摘）",
+    publisher: "《艺术设计研究》（北京服装学院主办）",
+    url: "https://mp.weixin.qq.com/s/qW3ra9fuW_WX2WOGaGsK_A",
+    accessedAt: "2026-10-15",
+    note: "论文摘要：蝴蝶纹分类与寓意，作者陈雷、柏贵喜。",
   },
 ];
 export const cultures: readonly CultureEntry[] = [
@@ -31,6 +40,31 @@ export const cultures: readonly CultureEntry[] = [
     ],
     images: [],
     sourceRefs: ["ihchina-zhoucheng"],
+    relatedPatternIds: [],
+  },
+  {
+    id: "butterfly-pattern",
+    title: "蝴蝶纹：扎染中的经典纹样",
+    category: "纹样与寓意",
+    kind: "traditional",
+    summary:
+      "蝴蝶纹是白族扎染最具代表性的纹样，承载忠贞爱情与吉祥美好的寓意。",
+    body: [
+      "蝴蝶纹是白族扎染纹饰中最具代表性的纹样。研究者通过田野调查与图像学分析，将其分为单一式、复合式与几何变异式三类。",
+      "技法、结构与色彩等要素决定了蝴蝶纹的艺术风格；白族人赋予蝴蝶纹忠贞爱情和吉祥美好的象征寓意，并通过不同组合形式加以表达。",
+      "白族民众信仰观念的嵌入、村落文化氛围的熏染与多元文化的交融，是蝴蝶纹得以长久流传的关键因素。",
+    ],
+    images: [
+      {
+        src: butterflyField,
+        alt: "深蓝底白色蝴蝶纹样的白族扎染织物",
+        caption: "白族扎染蝴蝶纹样（论文作者田野调查拍摄）",
+        credit: "陈雷、柏贵喜（田野调查）",
+        license: "论文作者田野调查拍摄，正式使用许可待主开发者确认",
+        sourceRefs: ["journal-butterfly"],
+      },
+    ],
+    sourceRefs: ["journal-butterfly"],
     relatedPatternIds: [],
   },
 ];
