@@ -3,6 +3,7 @@ import type { CultureEntry } from "../../shared/types";
 import {
   ALL_CATEGORIES,
   filterCultureEntries,
+  getCultureEmptyState,
   getCultureCategories,
 } from "./filter";
 
@@ -48,5 +49,23 @@ describe("culture category filtering", () => {
   it("handles an empty entry list", () => {
     expect(getCultureCategories([])).toEqual([ALL_CATEGORIES]);
     expect(filterCultureEntries([], ALL_CATEGORIES)).toEqual([]);
+    expect(getCultureEmptyState([], [], ALL_CATEGORIES)).toEqual({
+      title: "暂无资料",
+      description: "文化资料将在核对来源后加入。",
+      canShowAll: false,
+    });
+  });
+
+  it("shows a category-specific empty state with a way back to all", () => {
+    expect(
+      getCultureEmptyState(entries, [], "测试分类 A"),
+    ).toEqual({
+      title: "该分类暂无内容",
+      description: "“测试分类 A”分类下暂无内容。",
+      canShowAll: true,
+    });
+    expect(getCultureEmptyState(entries, [entries[0]], "测试分类 A")).toBe(
+      undefined,
+    );
   });
 });

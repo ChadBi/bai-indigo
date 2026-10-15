@@ -7,7 +7,12 @@ import SourceList from "../../shared/components/SourceList.vue";
 import ContentImage from "../../shared/components/ContentImage.vue";
 import EmptyState from "../../shared/components/EmptyState.vue";
 import BaseButton from "../../shared/components/BaseButton.vue";
-import { ALL_CATEGORIES, filterCultureEntries, getCultureCategories } from "./filter";
+import {
+  ALL_CATEGORIES,
+  filterCultureEntries,
+  getCultureCategories,
+  getCultureEmptyState,
+} from "./filter";
 const props = defineProps<{
   entries: readonly CultureEntry[];
   sources: readonly SourceRef[];
@@ -17,6 +22,13 @@ const selectedCategory = ref(ALL_CATEGORIES);
 const categories = computed(() => getCultureCategories(props.entries));
 const visibleEntries = computed(() =>
   filterCultureEntries(props.entries, selectedCategory.value),
+);
+const emptyState = computed(() =>
+  getCultureEmptyState(
+    props.entries,
+    visibleEntries.value,
+    selectedCategory.value,
+  ),
 );
 watch(categories, (nextCategories) => {
   if (!nextCategories.includes(selectedCategory.value)) {
@@ -44,14 +56,18 @@ watch(categories, (nextCategories) => {
     />
   </div>
   <EmptyState
-    v-if="!visibleEntries.length"
-    title="还没有资料"
-    :description="
-      entries.length
-        ? `“${selectedCategory}”分类下暂无资料。`
-        : '文化资料将在核对来源后加入。'
-    "
-  /><DetailDialog
+    v-if="emptyState"
+    :title="emptyState.title"
+    :description="emptyState.description"
+  >
+    <BaseButton
+      v-if="emptyState.canShowAll"
+      variant="secondary"
+      @click="selectedCategory = ALL_CATEGORIES"
+      >查看全部资料</BaseButton
+    >
+  </EmptyState>
+  <DetailDialog
     v-if="selected"
     :title="selected.title"
     @close="selected = undefined"
