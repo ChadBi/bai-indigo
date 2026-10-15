@@ -39,16 +39,71 @@ function select(id: PatternId) {
     ><span class="eyebrow">{{
       selected.kind === "original" ? "原创内容" : "传统工艺资料"
     }}</span>
-    <p v-for="paragraph in selected.body" :key="paragraph">{{ paragraph }}</p>
-    <ContentImage
+    <div class="story-detail">
+  <div class="story-detail__body">
+   <p
+  v-for="(paragraph, index) in selected.body"
+  :key="index"
+  class="story-detail__paragraph"
+>
+  {{ paragraph }}
+</p>
+  </div>
+
+  <div class="story-detail__images">
+    <div
       v-for="image in selected.images"
       :key="image.src"
-      :image="image"
-    /><SourceList :refs="selected.sourceRefs" :sources="sources" /><BaseButton
-      v-for="id in selected.relatedPatternIds"
-      :key="id"
-      @click="select(id)"
-      >从相关模板开始</BaseButton
-    ></DetailDialog
-  >
+      class="story-detail__image"
+    >
+      <ContentImage :image="image" />
+
+      <p class="story-detail__license">
+        <strong>许可：</strong>{{ image.license }}
+      </p>
+
+      <SourceList :refs="image.sourceRefs" :sources="sources" />
+    </div>
+  </div>
+
+ <SourceList :refs="selected.sourceRefs" :sources="sources" />
+
+<BaseButton
+  v-for="id in selected.relatedPatternIds"
+  :key="id"
+  @click="select(id)"
+>
+  从相关模板开始
+</BaseButton>
+</div>
+</DetailDialog>
 </template>
+<style scoped>
+.story-detail__body {
+  display: grid;
+  gap: 1rem;
+}
+
+.story-detail__paragraph {
+  margin: 0;
+  line-height: 1.8;
+}
+
+.story-detail__image :deep(.content-image) {
+  margin: 1.5rem 0 0.5rem;
+}
+
+.story-detail__image :deep(.content-image img) {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  max-height: 430px;
+  object-fit: contain;
+  background: var(--white);
+}
+
+.story-detail__license {
+  margin: 0.5rem 0 1rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+</style>
