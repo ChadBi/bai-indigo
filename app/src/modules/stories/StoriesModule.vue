@@ -21,62 +21,59 @@ function select(id: PatternId) {
 <template>
   <div class="content-grid">
     <div v-for="entry in entries" :key="entry.id" class="story-card">
-    <span class="eyebrow">{{ entry.category }}</span>
-<ContentCard 
-      :entry="entry"
-      @open="selected = entry"
-    />
-  </div>
-  </div>
-  <EmptyState
-    v-if="!entries.length"
-    title="还没有故事"
-    description="图文故事将在资料与素材核对后加入。"
-  /><DetailDialog
-    v-if="selected"
-    :title="selected.title"
-    @close="selected = undefined"
-    ><span class="eyebrow">{{
-      selected.kind === "original" ? "原创内容" : "传统工艺资料"
-    }}</span>
-    <div class="story-detail">
-  <div class="story-detail__body">
-   <p
-  v-for="(paragraph, index) in selected.body"
-  :key="index"
-  class="story-detail__paragraph"
->
-  {{ paragraph }}
-</p>
-  </div>
-
-  <div class="story-detail__images">
-    <div
-      v-for="image in selected.images"
-      :key="image.src"
-      class="story-detail__image"
-    >
-      <ContentImage :image="image" />
-
-      <p class="story-detail__license">
-        <strong>许可：</strong>{{ image.license }}
-      </p>
-
-      <SourceList :refs="image.sourceRefs" :sources="sources" />
+      <span class="eyebrow">{{ entry.category }}</span>
+      <ContentCard :entry="entry" @open="selected = entry" />
     </div>
   </div>
+  <EmptyState v-if="!entries.length" title="还没有故事" description="图文故事将在资料与素材核对后加入。" />
+ <DetailDialog
+  v-if="selected"
+  :title="selected.title"
+  @close="selected = undefined">
+  <span class="eyebrow">
+    {{ selected.kind === "original" ? "原创内容" : "传统工艺资料" }}
+  </span>
+    <div class="story-detail">
+      <div class="story-detail__body">
+        <template v-if="selected.body.length">
+          <p v-for="(paragraph, index) in selected.body" :key="index" class="story-detail__paragraph">
+            {{ paragraph }}
+          </p>
+        </template>
+        <EmptyState v-else title="暂无正文" description="这篇故事暂时没有正文内容。" />
+      </div>
 
- <SourceList :refs="selected.sourceRefs" :sources="sources" />
+      <div class="story-detail__images">
+        <template v-if="selected.images.length">
+          <div v-for="image in selected.images" :key="image.src" class="story-detail__image">
+            <ContentImage :image="image" />
 
-<BaseButton
-  v-for="id in selected.relatedPatternIds"
-  :key="id"
-  @click="select(id)"
->
-  从相关模板开始
-</BaseButton>
-</div>
-</DetailDialog>
+            <p class="story-detail__license">
+              <strong>许可：</strong>{{ image.license }}
+            </p>
+
+            <SourceList :refs="image.sourceRefs" :sources="sources" />
+          </div>
+        </template>
+        <EmptyState v-else title="暂无图片" description="这篇故事暂时没有配图。" />
+ </div> <!-- 关闭 story-detail__images -->
+
+      <SourceList :refs="selected.sourceRefs" :sources="sources" />
+
+      <div v-if="selected.relatedPatternIds.length">
+        <BaseButton
+          v-for="id in selected.relatedPatternIds"
+          :key="id"
+          @click="select(id)"
+        >
+          从相关模板开始
+        </BaseButton>
+      </div>
+      <p v-else class="story-detail__empty">
+        暂无关联模板。
+      </p>
+    </div> <!-- 关闭 story-detail -->
+  </DetailDialog>
 </template>
 <style scoped>
 .story-detail__body {
@@ -87,6 +84,7 @@ function select(id: PatternId) {
 .story-detail__paragraph {
   margin: 0;
   line-height: 1.8;
+  overflow-wrap: anywhere;
 }
 
 .story-detail__image :deep(.content-image) {
@@ -105,5 +103,11 @@ function select(id: PatternId) {
   margin: 0.5rem 0 1rem;
   color: var(--muted);
   font-size: 0.875rem;
+}
+
+.story-detail__empty {
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-top: 1rem;
 }
 </style>
