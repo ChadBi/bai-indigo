@@ -85,7 +85,7 @@ watch(categories, (nextCategories) => {
       />
       <SourceList :refs="selected.sourceRefs" :sources="sources" />
     </div>
-  /></DetailDialog>
+  </DetailDialog>
 </template>
 
 <style scoped>
