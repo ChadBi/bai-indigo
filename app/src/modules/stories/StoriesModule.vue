@@ -52,13 +52,20 @@ function select(id: PatternId) {
               <strong>许可：</strong>{{ image.license }}
             </p>
 
-            <SourceList :refs="image.sourceRefs" :sources="sources" />
           </div>
         </template>
         <EmptyState v-else title="暂无图片" description="这篇故事暂时没有配图。" />
  </div> <!-- 关闭 story-detail__images -->
 
-      <SourceList :refs="selected.sourceRefs" :sources="sources" />
+      <SourceList
+  :refs="[
+    ...new Set([
+      ...selected.sourceRefs,
+      ...selected.images.flatMap((image) => image.sourceRefs),
+    ]),
+  ]"
+  :sources="sources"
+/>
 
       <div v-if="selected.relatedPatternIds.length">
         <BaseButton
