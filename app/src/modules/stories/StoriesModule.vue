@@ -19,7 +19,7 @@ function select(id: PatternId) {
 }
 </script>
 <template>
-  <div class="content-grid">
+  <div class="content-grid story-grid">
     <div v-for="entry in entries" :key="entry.id" class="story-card">
       <span class="eyebrow">{{ entry.category }}</span>
       <ContentCard :entry="entry" @open="selected = entry" />
@@ -116,5 +116,42 @@ function select(id: PatternId) {
   color: var(--muted);
   font-size: 0.875rem;
   margin-top: 1rem;
+}
+.story-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.story-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.story-card > .eyebrow {
+  margin-bottom: 8px;
+}
+
+.story-card :deep(.content-card) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.story-card :deep(.content-card > .button) {
+  margin-top: auto;
+  align-self: flex-start;
+}
+
+@media (max-width: 1000px) {
+  .story-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .story-grid {
+    grid-template-columns: 1fr;
+  }
 }
 </style>

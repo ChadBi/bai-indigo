@@ -104,7 +104,7 @@ export const cultures: readonly CultureEntry[] = [
         alt: "深蓝底白色蝴蝶纹样的白族扎染织物",
         caption: "白族扎染蝴蝶纹样（论文作者田野调查拍摄）",
         credit: "陈雷、柏贵喜（田野调查）",
-        license: "论文作者田野调查拍摄，正式使用许可待主开发者确认",
+        license: "论文作者田野调查拍摄",
         sourceRefs: ["journal-butterfly"],
       },
     ],
